@@ -1,1 +1,7 @@
-# courbe_toujours
+# Courbe toujours
+
+## Team
+ - JALABERT Thomas
+ - MÔNIER Marhold
+ - JEMELEVEMEGATO Carjabitanice
+ 
