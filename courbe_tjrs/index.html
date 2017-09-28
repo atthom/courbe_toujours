@@ -16,52 +16,43 @@
         //  Be sure to replace it with an updated version before you start experimenting with adding your own code.
 
         var game = new Phaser.Game(600, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update });
-
-
-        var bmd;
         var player;
-        var i = 0;
-        var p = null;
         var cursors;
 
-
         function preload () {
-            //game.load.image('background', 'black.png');
+            // si on a besoin de charger des images
         }
 
         function create () {
-
-            
-            //colors = Phaser.Color.HSVColorWheel();
-
-            //  Create a Circle
             var circle = new Phaser.Circle(game.world.centerX, game.world.centerY, 20);
-
+            // création de la boule
             player = game.add.graphics(0, 0);
-            // cc.lineStyle(1, 0x00ff00, 2);
             player.beginFill(getRandomColor(), 1);
             player.drawCircle(circle.x, circle.y, circle.diameter);
 
+            // on charge les physics arcades
             game.physics.arcade.enable(player);
-            //  Player physics properties. Give the little guy a slight bounce.
-            //player.body.bounce.y = 2;
-            //player.body.collideWorldBounds = true;
+            // on check si les bords sont atteints
             player.checkWorldBounds = true;
+            // si on touche les bords, on appelle la fonction 'playerOut'
             player.events.onOutOfBounds.add(playerOut, this);
 
+            // on charge les controles au clavier
             cursors = game.input.keyboard.createCursorKeys();
                     
         }
 
         function update () {            
             //  Reset the players velocity (movement)
-           keyboard_control();
-            
+            // controls claviers
+           keyboard_control();            
         }
 
         function playerOut() {
+            // pour voir ou est le joueur
             console.log(player.x, player.y);
 
+            // pour téléporter le joueur de l'autre coté de l'écran si il sort
             if(Math.abs(player.x) > 300) {
                 player.reset(player.x * -1 , player.y);
             }
@@ -96,33 +87,13 @@
             }
         }
 
-        function fadePicture() {
-           
-        }
-
         function getRandomColor() {
             var length = 6;
             var chars = '0123456789ABCDEF';
             var hex = '0x';
             while(length--) hex += chars[(Math.random() * 16) | 0];
             return hex;
-        }
-
-        function tweenTint(obj, startColor, endColor, time = 250, delay = 0, callback = null) {
-            if (obj) {
-                let colorBlend = { step: 0 };
-                let colorTween = game.add.tween(colorBlend).to({ step: 100 }, time, Phaser.Easing.Linear.None, delay);
-                colorTween.onUpdateCallback(() => {
-                    obj.tint = Phaser.Color.interpolateColor(startColor, endColor, 100, colorBlend.step);
-                });
-                // obj.tint = startColor;
-                if (callback) {
-                    colorTween.onComplete.add(callback, this);
-                }
-                colorTween.start();
-            }
-        }
-        
+        }        
     };
 
     </script>
