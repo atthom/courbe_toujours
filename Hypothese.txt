@@ -1,27 +1,41 @@
 Jeu de type Curve Fever (genre de snake)
 Utilisateur cible : Nous / etudiants en general
 
-Hypothèse : l'utilisation de la souris est plus adaptée au gameplay du jeu développé que le clavier, ou que le gamepad. La direction prise par la créature étant relative à sa position, l'utilisation des touches flechées ou d'un gamepad seraient contre-intuitives puisque tourner à gauche ou à droite serait différent en fonction de la direction visée par la créature. L'utilisation de la souris permet de s'affranchir de toute direction relative et nous parrait donc plus appropriée. 
+Hypothèse : l'utilisation de la souris est plus adaptée au gameplay du jeu développé que le clavier, ou que le gamepad. 
+La direction prise par la créature étant relative à sa position, l'utilisation des touches flechées ou d'un gamepad seraient 
+contre-intuitives puisque tourner à gauche ou à droite serait différent en fonction de la direction visée par la créature. 
+L'utilisation de la souris permet de s'affranchir de toute direction relative et nous parrait donc plus appropriée. 
 
 
-- Tests d'interactions (Tache 1 / technique 1, tache 1 / technique 2, tache 2 / technique 1, tache 2 / technique 2) permettant de justifier l'hypothèse. Faire un ratio Utilité/performance. Ex : pour la tache n 1, la methode d'interaction vocale est plus pratique que la tactile, etc...Voir quelles sont les variables importantes à évaluer. (Ex : pour l'efficacité, faut voir le nombre d'erreurs, le fait que le programme soit intuitif à utiliser ou non, etc)
+- Tests d'interactions (Tache 1 / technique 1, tache 1 / technique 2, tache 2 / technique 1, tache 2 / technique 2) permettant de justifier l'hypothèse. 
+Faire un ratio Utilité/performance. Ex : pour la tache n 1, la methode d'interaction vocale est plus pratique que la tactile, etc...
+Voir quelles sont les variables importantes à évaluer. (Ex : pour l'efficacité, faut voir le nombre d'erreurs, le fait que le programme soit 
+intuitif à utiliser ou non, etc)
 
-Tache 1 : Tourner à gauche / droite ==> variables importantes : représentation de l'espace (vers où la créature est tournée, doit être intuitif), nécessite de rendre la visualisation de la direction prise par la créature CLAIR (donc code couleur, ou fleche ou un truc comme ca)
-Tache 2 : Passer précisément entre deux zones "à risque" (i.e entre deux traits rappprochés qui provoqueraient la mort de la créature en cas de collision) ==> variables importantes : Précision (pas de délai dans les inputs)
+Tache 1 : Tourner à gauche / droite ==> variables importantes : représentation de l'espace (vers où la créature est tournée, doit être intuitif), 
+nécessite de rendre la visualisation de la direction prise par la créature CLAIR (donc code couleur, ou fleche ou un truc comme ca)
+Tache 2 : Passer précisément entre deux zones "à risque" (i.e entre deux traits rappprochés qui provoqueraient la mort de la créature en cas de collision) 
+==> variables importantes : Précision (pas de délai dans les inputs)
 Technique 1 : Souris (avantage : précision)
 Technique 2 : Clavier (avantage : accessible sur tous les PC portables)
 (eventuellement) Technique 3 : Gamepad (avantage : ???)
 
-Tache 1 / Technique 1 : Simple, on pointe la direction dans laquelle on veut se diriger. La créature se dirige vers le pointeur de la souris. Possibles limitations de l'angle pris par la créature lorsqu'elle tourne (par de 360 noscope, la créature tourne progressivement et ne fait pas un tour complet comme un barbare)
-Tache 1 / Technique 2 : Appuyer sur Droite (par exemple) permet à la créature de s'orienter vers SA droite (i.e si la créature pointe vers le bas, SA droite sera la GAUCHE du joueur : un peu contre intuitif imo)
-Tache 2 / Technique 1 : Pour passer précisément entre deux zones "dangereuses" avec la souris, on pointe juste entre les deux et la créature devrait s'engoufrer dans la faille (en considérent qu'elle ait la place de manoeuvrer avant, c'est à dire sans prendre un angle à 90 degré par exemple)
-Tache 2 / Technique 2 : Pour passer précisément entre deux zones "dangereuses" avec le clavier, on doit "jouer" avec droite/gauche jusqu'à avoir le bon angle et en prenant en compte l'éventuel delai input (et le problème d'angles souligné avec la souris, c'est à dire pas de tour complet)
+Tache 1 / Technique 1 : Simple, on pointe la direction dans laquelle on veut se diriger. La créature se dirige vers le pointeur de la souris. 
+Possibles limitations de l'angle pris par la créature lorsqu'elle tourne (par de 360 noscope, la créature tourne progressivement et ne fait pas un 
+tour complet comme un barbare)
+Tache 1 / Technique 2 : Appuyer sur Droite (par exemple) permet à la créature de s'orienter vers SA droite (i.e si la créature pointe vers le bas, 
+SA droite sera la GAUCHE du joueur : un peu contre intuitif imo)
+Tache 2 / Technique 1 : Pour passer précisément entre deux zones "dangereuses" avec la souris, on pointe juste entre les deux et la créature devrait 
+s'engoufrer dans la faille (en considérent qu'elle ait la place de manoeuvrer avant, c'est à dire sans prendre un angle à 90 degré par exemple)
+Tache 2 / Technique 2 : Pour passer précisément entre deux zones "dangereuses" avec le clavier, on doit "jouer" avec droite/gauche jusqu'à avoir le 
+bon angle et en prenant en compte l'éventuel delai input (et le problème d'angles souligné avec la souris, c'est à dire pas de tour complet)
 
 Ratio : ???
 
 - PROPOSER DES TESTS ET COMMENT CA VERIFIE DES HYPOTHESES :
 Test simple : faire tester notre jeu par de sympathiques cobayes, et modifier notre hypothèse en fonciton des retours utilisateurs (classique). 
-Autres tests : faire des parties avec l'un et l'autre des supports (souris ou clavier, peut être gamepad) et voir avec lequel on atteint le score le plus élevé.
+Autres tests : faire des parties avec l'un et l'autre des supports (souris ou clavier, peut être gamepad) et voir avec lequel on atteint le 
+score le plus élevé.
 
 
 Scénario : 
@@ -30,5 +44,6 @@ Il arrive dans le menu, et selectionne nouvelle partie (on verra plus tard pour 
 il choisit son support (souris / clavier)
 La partie démarre, il joue selon son support choisi
 Le chrono / le score s'incrémente au fur et à mesure de la partie.
-Quand le joueur meurt de décès, la partie s'arrete et on enregistre le score / le timer dans le leaderboard (possiblement le support utilisé, comme ca on peut confirmer notre hypothèse si il y a une grosse différence)
+Quand le joueur meurt de décès, la partie s'arrete et on enregistre le score / le timer dans le leaderboard (possiblement le support 
+utilisé, comme ca on peut confirmer notre hypothèse si il y a une grosse différence)
 Il est renvoyé au menu principal et il fait comme il veut.
