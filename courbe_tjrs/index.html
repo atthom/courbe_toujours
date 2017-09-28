@@ -1,0 +1,131 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>hello phaser!</title>
+        <script src="phaser.min.js"></script>
+    </head>
+    <body>
+
+    <script type="text/javascript">
+
+    window.onload = function() {
+
+        //  Note that this html file is set to pull down Phaser 2.5.0 from the JS Delivr CDN.
+        //  Although it will work fine with this tutorial, it's almost certainly not the most current version.
+        //  Be sure to replace it with an updated version before you start experimenting with adding your own code.
+
+        var game = new Phaser.Game(600, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update });
+
+
+        var bmd;
+        var player;
+        var i = 0;
+        var p = null;
+        var cursors;
+
+
+        function preload () {
+            //game.load.image('background', 'black.png');
+        }
+
+        function create () {
+
+            
+            //colors = Phaser.Color.HSVColorWheel();
+
+            //  Create a Circle
+            var circle = new Phaser.Circle(game.world.centerX, game.world.centerY, 20);
+
+            player = game.add.graphics(0, 0);
+            // cc.lineStyle(1, 0x00ff00, 2);
+            player.beginFill(getRandomColor(), 1);
+            player.drawCircle(circle.x, circle.y, circle.diameter);
+
+            game.physics.arcade.enable(player);
+            //  Player physics properties. Give the little guy a slight bounce.
+            //player.body.bounce.y = 2;
+            //player.body.collideWorldBounds = true;
+            player.checkWorldBounds = true;
+            player.events.onOutOfBounds.add(playerOut, this);
+
+            cursors = game.input.keyboard.createCursorKeys();
+                    
+        }
+
+        function update () {            
+            //  Reset the players velocity (movement)
+           keyboard_control();
+            
+        }
+
+        function playerOut() {
+            console.log(player.x, player.y);
+
+            if(Math.abs(player.x) > 300) {
+                player.reset(player.x * -1 , player.y);
+            }
+            if(Math.abs(player.y) > 300) {
+                player.reset(player.x, player.y * -1);
+            }
+        }
+
+        function keyboard_control() {
+            player.body.velocity.x = 0;
+            player.body.velocity.y = 0;
+
+            if (cursors.left.isDown)
+            {
+                //  Move to the left
+                player.body.velocity.x = -300;
+            }
+            if (cursors.right.isDown)
+            {
+                //  Move to the right
+                player.body.velocity.x = 300;
+            }
+            if (cursors.up.isDown)
+            {
+                //  Move to the right
+                player.body.velocity.y = -300;
+            }
+            if (cursors.down.isDown)
+            {
+                //  Move to the right
+                player.body.velocity.y = 300;
+            }
+        }
+
+        function fadePicture() {
+           
+        }
+
+        function getRandomColor() {
+            var length = 6;
+            var chars = '0123456789ABCDEF';
+            var hex = '0x';
+            while(length--) hex += chars[(Math.random() * 16) | 0];
+            return hex;
+        }
+
+        function tweenTint(obj, startColor, endColor, time = 250, delay = 0, callback = null) {
+            if (obj) {
+                let colorBlend = { step: 0 };
+                let colorTween = game.add.tween(colorBlend).to({ step: 100 }, time, Phaser.Easing.Linear.None, delay);
+                colorTween.onUpdateCallback(() => {
+                    obj.tint = Phaser.Color.interpolateColor(startColor, endColor, 100, colorBlend.step);
+                });
+                // obj.tint = startColor;
+                if (callback) {
+                    colorTween.onComplete.add(callback, this);
+                }
+                colorTween.start();
+            }
+        }
+        
+    };
+
+    </script>
+
+    </body>
+</html>
