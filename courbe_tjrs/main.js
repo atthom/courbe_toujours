@@ -7,15 +7,21 @@ window.onload = function() {
     const game = new Phaser.Game(600, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update, render: render });
     const gameWidth = 600;
     const gameHeight = 600;
+    const bombProbability = .99; // better stay between .990 and .995
 
     let player;
     let cursors;
     let randomCol = getRandomColor();
     let texture;
     let controls;
+    let graphics; 
+    let bomb;
+
+    
 
     function preload() {
         // si on a besoin de charger des images
+        game.load.image('bomb', 'assets/bomb-mini.png');
     }
 
     function create() {
@@ -44,9 +50,10 @@ window.onload = function() {
 
         controls = new Controls(game, player, texture, Phaser, cursors);
 
+        graphics = game.add.graphics(game.world.centerX, game.world.centerY);
     }
 
-    function render() {}
+    function render() { }
 
     function update() {
         texture.renderXY(player, player.x, player.y);
@@ -86,9 +93,18 @@ window.onload = function() {
     }
 
     function addBomb() {
-        if (Math.random() > .991 /*.995*/) {
-            let bomb = new Phaser.Circle(10, 10, 15);  
-            console.debug("bomb");
+        if (Math.random() > bombProbability ) {
+            const x = Math.floor(Math.random() * gameWidth) - gameWidth / 2;
+            const y = Math.floor(Math.random() * gameHeight) - gameHeight / 2;
+            console.debug("player: " + player.x + " " + player.y + "\nbomb: " + x + " " + y);
+            console.debug("dist: " + distance(x, y, player.x, player.y));
+            if (distance(x, y, player.x, player.y) > 100) {
+                bomb = game.add.sprite(x, y, 'bomb');                
+            }
         }
+    }
+
+    function distance(x1, y1, x2, y2) {
+        return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
     }
 };
