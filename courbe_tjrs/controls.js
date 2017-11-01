@@ -6,6 +6,12 @@ class Controls {
         this.Phaser = Phaser;
         // on charge les controles au clavier
         this.cursors = this.game.input.keyboard.createCursorKeys();
+        this.zqsd = {
+            up: game.input.keyboard.addKey(Phaser.Keyboard.Z),
+            down: game.input.keyboard.addKey(Phaser.Keyboard.S),
+            left: game.input.keyboard.addKey(Phaser.Keyboard.Q),
+            right: game.input.keyboard.addKey(Phaser.Keyboard.D),
+        };
     }
 
     mouse_control() {
@@ -51,16 +57,16 @@ class Controls {
         this.player.body.velocity.x = 0;
         this.player.body.velocity.y = 0;
 
-        if (this.cursors.left.isDown)
+        if (this.cursors.left.isDown || this.zqsd.left.isDown)
             this.player.body.velocity.x = -150;
 
-        if (this.cursors.right.isDown)
+        if (this.cursors.right.isDown || this.zqsd.right.isDown)
             this.player.body.velocity.x = 150;
 
-        if (this.cursors.up.isDown)
+        if (this.cursors.up.isDown || this.zqsd.up.isDown)
             this.player.body.velocity.y = -150;
 
-        if (this.cursors.down.isDown)
+        if (this.cursors.down.isDown || this.zqsd.down.isDown)
             this.player.body.velocity.y = 150;
     }
 

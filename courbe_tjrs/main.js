@@ -30,20 +30,8 @@ window.onload = function() {
         createMine(-40, 530);
         createMine(530, -40);
         createMine(530, 530);
-        /*
-                mine = game.add.sprite(-20, -20, 'mine');
-                mine.scale.setTo(0.11, 0.11);
-                mine2 = game.add.sprite(620, -20, 'mine');
-                mine2.scale.setTo(0.11, 0.11);
-                mine3 = game.add.sprite(0, -20, 'mine');
-                mine3.scale.setTo(0.11, 0.11);
-                mine4 = game.add.sprite(620, 620, 'mine');
-                mine4.scale.setTo(0.11, 0.11);
-        */
+
         init();
-        // game.input.addMoveCallback(move, this); 
-        controls = new Controls(game, player, texture, Phaser);
-        graphics = game.add.graphics(game.world.centerX, game.world.centerY);
     }
 
     function init() {
@@ -53,10 +41,12 @@ window.onload = function() {
         game.scale.pageAlignHorizontally = true;
         game.scale.pageAlignVertically = true;
         game.scale.refresh();
+
+        // add controls
+        controls = new Controls(game, player, texture, Phaser);
     }
 
     function createMine(x, y) {
-        //mine = game.add.graphics(220, 220);
         var mine = game.add.sprite(x, y, 'mine');
         mine.scale.setTo(0.15, 0.15);
     }
