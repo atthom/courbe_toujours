@@ -11,7 +11,6 @@ class Controls {
         if (this.game.input.mousePointer.isDown) {
             //  400 is the speed it will move towards the mouse
             this.game.physics.arcade.moveToPointer(this.player, 400);
-
             //  if it's overlapping the mouse, don't move any more
             if (this.Phaser.Rectangle.contains(this.player.body, this.game.input.x, this.game.input.y)) {
                 this.player.body.velocity.setTo(0, 0);
