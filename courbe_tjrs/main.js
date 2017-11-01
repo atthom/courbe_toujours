@@ -16,18 +16,31 @@ window.onload = function() {
     let bomb;
     let score;
     let scoreText;
-    let mine;
 
     function preload() {
         // si on a besoin de charger des images
         game.load.image('bomb', 'assets/bomb-mini.png');
-        game.load.image('mine', 'assets/mine2.png');
+        game.load.image('mine', 'assets/mine5.jpg');
     }
 
     function create() {
-        init();
         createplayer();
-        // createMines();
+
+        createMine(-40, -40);
+        createMine(-40, 530);
+        createMine(530, -40);
+        createMine(530, 530);
+        /*
+                mine = game.add.sprite(-20, -20, 'mine');
+                mine.scale.setTo(0.11, 0.11);
+                mine2 = game.add.sprite(620, -20, 'mine');
+                mine2.scale.setTo(0.11, 0.11);
+                mine3 = game.add.sprite(0, -20, 'mine');
+                mine3.scale.setTo(0.11, 0.11);
+                mine4 = game.add.sprite(620, 620, 'mine');
+                mine4.scale.setTo(0.11, 0.11);
+        */
+        init();
         // game.input.addMoveCallback(move, this); 
         controls = new Controls(game, player, texture, Phaser);
         graphics = game.add.graphics(game.world.centerX, game.world.centerY);
@@ -40,6 +53,12 @@ window.onload = function() {
         game.scale.pageAlignHorizontally = true;
         game.scale.pageAlignVertically = true;
         game.scale.refresh();
+    }
+
+    function createMine(x, y) {
+        //mine = game.add.graphics(220, 220);
+        var mine = game.add.sprite(x, y, 'mine');
+        mine.scale.setTo(0.15, 0.15);
     }
 
 
