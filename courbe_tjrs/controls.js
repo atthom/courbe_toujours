@@ -1,10 +1,11 @@
 class Controls {
-    constructor(game, player, texture, Phaser, cursors) {
+    constructor(game, player, texture, Phaser) {
         this.game = game;
         this.texture = texture;
         this.player = player;
         this.Phaser = Phaser;
-        this.cursors = cursors;
+        // on charge les controles au clavier
+        this.cursors = this.game.input.keyboard.createCursorKeys();
     }
 
     mouse_control() {
@@ -21,7 +22,6 @@ class Controls {
     }
 
     move(pointer, x, y, click) {
-
         //  If the cursor is locked to the game, and the callback was not fired from a 'click' event
         //  (such as a mouse click or touch down) - as then it might contain incorrect movement values
         while (click) {

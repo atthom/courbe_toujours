@@ -3,13 +3,12 @@ window.onload = function() {
     //  Although it will work fine with this tutorial, it's almost certainly not the most current version.
     //  Be sure to replace it with an updated version before you start experimenting with adding your own code.
 
-    const gameWidth = 625;
-    const gameHeight = 625;
+    const gameWidth = 600;
+    const gameHeight = 600;
     const game = new Phaser.Game(gameWidth, gameHeight, Phaser.AUTO, '', { preload: preload, create: create, update: update, render: render });
     const bombProbability = .99; // better stay between .990 and .995
 
     let player;
-    let cursors;
     let randomCol = getRandomColor();
     let texture;
     let controls;
@@ -17,48 +16,55 @@ window.onload = function() {
     let bomb;
     let score;
     let scoreText;
+    let mine;
 
     function preload() {
         // si on a besoin de charger des images
-        //game.load.image('bomb', 'assets/bomb-mini.png');
+        game.load.image('bomb', 'assets/bomb-mini.png');
+        game.load.image('mine', 'assets/mine2.png');
     }
 
     function create() {
-        let circle = new Phaser.Circle(game.world.centerX, game.world.centerY, 15);
-        texture = game.add.renderTexture(gameWidth, gameHeight, 'mousetrail');
+        init();
+        createplayer();
+        // createMines();
+        // game.input.addMoveCallback(move, this); 
+        controls = new Controls(game, player, texture, Phaser);
+        graphics = game.add.graphics(game.world.centerX, game.world.centerY);
+    }
+
+    function init() {
         //affichage du score
         score = 0;
         scoreText = game.add.text(16, 16, 'score: 0', { fontSize: '20px', fill: '#555' });
+        game.scale.pageAlignHorizontally = true;
+        game.scale.pageAlignVertically = true;
+        game.scale.refresh();
+    }
+
+
+    function createplayer() {
+        let circle = new Phaser.Circle(game.world.centerX, game.world.centerY, 15);
+        texture = game.add.renderTexture(gameWidth, gameHeight, 'mousetrail');
         // création de la boule
         player = game.add.graphics(0, 0);
         player.beginFill(randomCol, 1);
         player.drawCircle(circle.x, circle.y, circle.diameter);
         game.add.sprite(0, 0, texture);
         player.anchor.setTo(0.5, 0.5);
-
         // on charge les physics arcades
         game.physics.arcade.enable(player);
-        // on check si les bords sont atteints
-        player.checkWorldBounds = true;
         // si on touche les bords, on appelle la fonction 'playerOut'
         player.events.onOutOfBounds.add(playerOut, this);
-
-        // on charge les controles au clavier
-        cursors = game.input.keyboard.createCursorKeys();
-        // game.input.addMoveCallback(move, this); 
-        controls = new Controls(game, player, texture, Phaser, cursors);
-        graphics = game.add.graphics(game.world.centerX, game.world.centerY);
-
-        game.scale.pageAlignHorizontally = true;
-        game.scale.pageAlignVertically = true;
-        game.scale.refresh();
+        // on check si les bords sont atteints
+        player.checkWorldBounds = true;
     }
 
     function render() {}
 
     function update() {
         texture.renderXY(player, player.x, player.y);
-        //addBomb();
+        addBomb();
         score += 0.01;
         afficherScore();
         //  Reset the players velocity (movement)
@@ -93,7 +99,7 @@ window.onload = function() {
         scoreText.text = 'Score: ' + parseInt(score);
     }
 
-    /*
+
     function addBomb() {
         if (Math.random() > bombProbability) {
             const x = Math.floor(Math.random() * gameWidth) - gameWidth / 2;
@@ -105,7 +111,7 @@ window.onload = function() {
             }
         }
     }
-    */
+
 
     function distance(x1, y1, x2, y2) {
         return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
