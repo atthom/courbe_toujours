@@ -16,6 +16,8 @@ window.onload = function() {
     let controls;
     let graphics; 
     let bomb;
+    let score;
+    let scoreText;
 
     
 
@@ -27,6 +29,9 @@ window.onload = function() {
     function create() {
         let circle = new Phaser.Circle(game.world.centerX, game.world.centerY, 15);
         texture = game.add.renderTexture(gameWidth, gameHeight, 'mousetrail');
+        //affichage du score
+        score = 0;
+        scoreText = game.add.text(16, 16, 'score: 0', { fontSize: '20px', fill: '#555' });
         // création de la boule
         player = game.add.graphics(0, 0);
         player.beginFill(randomCol, 1);
@@ -58,6 +63,8 @@ window.onload = function() {
     function update() {
         texture.renderXY(player, player.x, player.y);
         addBomb();
+        score += 0.01;
+        afficherScore();
         //  Reset the players velocity (movement)
         // controls claviers
         //keyboard_control();       
@@ -87,6 +94,10 @@ window.onload = function() {
         while (length--) hex += chars[(Math.random() * 16) | 0];
         return hex;
     }
+
+        function afficherScore(){
+        scoreText.text = 'Score: ' + parseInt(score);
+}
 
     function isLost() {
 
