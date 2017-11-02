@@ -17,6 +17,16 @@ class Controls {
         this.pad = this.game.input.gamepad.pad1;
     }
 
+    control(name) {
+        if (name == "mouse") {
+            this.mouse_control();
+        } else if (name == "keyboard") {
+            this.keyboard_control();
+        } else if (name == "gamepad") {
+            this.gamepad_control();
+        }
+    }
+
     mouse_control() {
         if (this.game.input.mousePointer.isDown) {
             //  400 is the speed it will move towards the mouse

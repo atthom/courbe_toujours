@@ -95,7 +95,7 @@ window.onload = function() {
         //keyboard_control();       
         // console.log(player.x, player.y);
         //  only move when you click
-        controls.keyboard_control();
+        controls.control("keyboard");
     }
 
     function collisionHandler(obj1, obj2) {
