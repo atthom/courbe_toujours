@@ -13,48 +13,30 @@ window.onload = function() {
     let controls;
     let graphics;
     let bomb;
-    let score;
-    let scoreText;
-    let playerSprite;
-    let pad1;
-
-    let mine1, mine2, mine3, mine4;
+    var score;
+    //let scoreText;
 
     function preload() {
         // si on a besoin de charger des images
         game.load.image('bomb', 'assets/bomb-mini.png');
-        game.load.image('mine', 'assets/mine5.jpg');
     }
 
     function create() {
         createplayer();
-
-        mine1 = createMine(-40, -40);
-        mine2 = createMine(-40, 530);
-        mine3 = createMine(530, -40);
-        mine4 = createMine(530, 530);
-
         init();
+        controls = new Controls(game, player, texture, Phaser);
     }
 
     function init() {
         texture = game.add.renderTexture(gameWidth, gameHeight, 'mousetrail');
         game.add.sprite(0, 0, texture);
         //affichage du score
+
         score = 0;
         scoreText = game.add.text(16, 16, 'score: 0', { fontSize: '20px', fill: '#555' });
         game.scale.pageAlignHorizontally = true;
         game.scale.pageAlignVertically = true;
         game.scale.refresh();
-
-        controls = new Controls(game, player, texture, Phaser);
-    }
-
-    function createMine(x, y) {
-        var mine = game.add.sprite(x, y, 'mine');
-        mine.scale.setTo(0.15, 0.15);
-        game.physics.arcade.enable(mine);
-        return mine;
     }
 
     function createplayer() {
@@ -65,15 +47,13 @@ window.onload = function() {
         player.drawCircle(circle.x, circle.y, circle.diameter);
         player.boundsPadding = 0;
 
-        playerSprite = game.add.sprite(0, 0);
-        playerSprite.addChild(player);
-        game.physics.arcade.enable(playerSprite);
+        game.physics.arcade.enable(player);
         player.anchor.setTo(0.5, 0.5);
         // on charge les physics arcades
         // si on touche les bords, on appelle la fonction 'playerOut'
-        playerSprite.events.onOutOfBounds.add(playerOut, this);
+        player.events.onOutOfBounds.add(playerOut, this);
         // on check si les bords sont atteints
-        playerSprite.checkWorldBounds = true;
+        player.checkWorldBounds = true;
     }
 
     function render() {}
@@ -82,13 +62,6 @@ window.onload = function() {
         texture.renderXY(player, player.x, player.y);
         addBomb();
         updateScore();
-
-
-        //game.physics.arcade.collide(mine1, playerSprite, collisionHandler, null, this);
-        //game.physics.arcade.overlap(mine1, playerSprite, theEnd, null, this);
-        //game.physics.arcade.collide(player, mine2, collisionHandler, null, this);
-        // game.physics.arcade.collide(player, mine3, collisionHandler, null, this);
-        // game.physics.arcade.collide(player, mine4, collisionHandler, null, this);
 
         //  Reset the players velocity (movement)
         // controls claviers
