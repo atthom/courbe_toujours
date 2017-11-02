@@ -2,11 +2,10 @@ window.onload = function() {
     //  Note that this html file is set to pull down Phaser 2.5.0 from the JS Delivr CDN.
     //  Although it will work fine with this tutorial, it's almost certainly not the most current version.
     //  Be sure to replace it with an updated version before you start experimenting with adding your own code.
-
     const gameWidth = 600;
     const gameHeight = 600;
-    const game = new Phaser.Game(gameWidth, gameHeight, Phaser.AUTO, '', { preload: preload, create: create, update: update, render: render });
     const bombProbability = .99; // better stay between .990 and .995
+    const game = new Phaser.Game(gameWidth, gameHeight, Phaser.AUTO, '', { preload: preload, create: create, update: update, render: render });
 
     let player;
     let randomCol = getRandomColor();
@@ -16,6 +15,10 @@ window.onload = function() {
     let bomb;
     let score;
     let scoreText;
+    let playerSprite;
+    let pad1;
+
+    let mine1, mine2, mine3, mine4;
 
     function preload() {
         // si on a besoin de charger des images
@@ -26,15 +29,17 @@ window.onload = function() {
     function create() {
         createplayer();
 
-        createMine(-40, -40);
-        createMine(-40, 530);
-        createMine(530, -40);
-        createMine(530, 530);
+        mine1 = createMine(-40, -40);
+        mine2 = createMine(-40, 530);
+        mine3 = createMine(530, -40);
+        mine4 = createMine(530, 530);
 
         init();
     }
 
     function init() {
+        texture = game.add.renderTexture(gameWidth, gameHeight, 'mousetrail');
+        game.add.sprite(0, 0, texture);
         //affichage du score
         score = 0;
         scoreText = game.add.text(16, 16, 'score: 0', { fontSize: '20px', fill: '#555' });
@@ -42,31 +47,33 @@ window.onload = function() {
         game.scale.pageAlignVertically = true;
         game.scale.refresh();
 
-        // add controls
         controls = new Controls(game, player, texture, Phaser);
     }
 
     function createMine(x, y) {
         var mine = game.add.sprite(x, y, 'mine');
         mine.scale.setTo(0.15, 0.15);
+        game.physics.arcade.enable(mine);
+        return mine;
     }
-
 
     function createplayer() {
         let circle = new Phaser.Circle(game.world.centerX, game.world.centerY, 15);
-        texture = game.add.renderTexture(gameWidth, gameHeight, 'mousetrail');
         // création de la boule
         player = game.add.graphics(0, 0);
         player.beginFill(randomCol, 1);
         player.drawCircle(circle.x, circle.y, circle.diameter);
-        game.add.sprite(0, 0, texture);
+        player.boundsPadding = 0;
+
+        playerSprite = game.add.sprite(0, 0);
+        playerSprite.addChild(player);
+        game.physics.arcade.enable(playerSprite);
         player.anchor.setTo(0.5, 0.5);
         // on charge les physics arcades
-        game.physics.arcade.enable(player);
         // si on touche les bords, on appelle la fonction 'playerOut'
-        player.events.onOutOfBounds.add(playerOut, this);
+        playerSprite.events.onOutOfBounds.add(playerOut, this);
         // on check si les bords sont atteints
-        player.checkWorldBounds = true;
+        playerSprite.checkWorldBounds = true;
     }
 
     function render() {}
@@ -74,8 +81,15 @@ window.onload = function() {
     function update() {
         texture.renderXY(player, player.x, player.y);
         addBomb();
-        score += 0.01;
-        afficherScore();
+        updateScore();
+
+
+        //game.physics.arcade.collide(mine1, playerSprite, collisionHandler, null, this);
+        //game.physics.arcade.overlap(mine1, playerSprite, theEnd, null, this);
+        //game.physics.arcade.collide(player, mine2, collisionHandler, null, this);
+        // game.physics.arcade.collide(player, mine3, collisionHandler, null, this);
+        // game.physics.arcade.collide(player, mine4, collisionHandler, null, this);
+
         //  Reset the players velocity (movement)
         // controls claviers
         //keyboard_control();       
@@ -84,9 +98,16 @@ window.onload = function() {
         controls.keyboard_control();
     }
 
+    function collisionHandler(obj1, obj2) {
+        theEnd();
+    }
+
+    function theEnd() {
+        game.stage.backgroundColor = '#992d2d';
+        console.log("It is the end, my dudes");
+    }
+
     function playerOut() {
-        // pour voir ou est le joueur
-        console.log(player.x, player.y);
         // pour téléporter le joueur de l'autre coté de l'écran si il sort
         if (Math.abs(player.x) > gameWidth / 2) {
             player.reset(player.x * -1, player.y);
@@ -104,10 +125,10 @@ window.onload = function() {
         return hex;
     }
 
-    function afficherScore() {
+    function updateScore() {
+        score += 0.1;
         scoreText.text = 'Score: ' + parseInt(score);
     }
-
 
     function addBomb() {
         if (Math.random() > bombProbability) {
@@ -120,7 +141,6 @@ window.onload = function() {
             }
         }
     }
-
 
     function distance(x1, y1, x2, y2) {
         return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));

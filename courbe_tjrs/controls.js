@@ -1,17 +1,20 @@
 class Controls {
-    constructor(game, player, texture, Phaser) {
+    constructor(game, player, texture, Phaser, pad) {
         this.game = game;
         this.texture = texture;
         this.player = player;
         this.Phaser = Phaser;
-        // on charge les controles au clavier
         this.cursors = this.game.input.keyboard.createCursorKeys();
+        // on charge les controles au clavier
         this.zqsd = {
             up: game.input.keyboard.addKey(Phaser.Keyboard.Z),
             down: game.input.keyboard.addKey(Phaser.Keyboard.S),
             left: game.input.keyboard.addKey(Phaser.Keyboard.Q),
             right: game.input.keyboard.addKey(Phaser.Keyboard.D),
         };
+        // add controls
+        this.game.input.gamepad.start();
+        this.pad = this.game.input.gamepad.pad1;
     }
 
     mouse_control() {
@@ -70,43 +73,16 @@ class Controls {
             this.player.body.velocity.y = 150;
     }
 
-    /*
     gamepad_control() {
-        // Pad "connected or not" indicator
-        if (game.input.gamepad.supported && game.input.gamepad.active && pad1.connected)
-            indicator.animations.frame = 0;
-        else
-            indicator.animations.frame = 1;
+        var leftStickX = this.pad.axis(this.Phaser.Gamepad.XBOX360_STICK_LEFT_X);
+        var leftStickY = this.pad.axis(this.Phaser.Gamepad.XBOX360_STICK_LEFT_Y);
 
-        // Controls
-        if (pad1.isDown(Phaser.Gamepad.XBOX360_DPAD_LEFT) || pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) < -0.1)
-            sprite.x--;
-        else if (pad1.isDown(Phaser.Gamepad.XBOX360_DPAD_RIGHT) || pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) > 0.1)
-            sprite.x++;
-
-        if (pad1.isDown(Phaser.Gamepad.XBOX360_DPAD_UP) || pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) < -0.1)
-            sprite.y--;
-        else if (pad1.isDown(Phaser.Gamepad.XBOX360_DPAD_DOWN) || pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) > 0.1)
-            sprite.y++;
-
-        if (pad1.justPressed(Phaser.Gamepad.XBOX360_A))
-            sprite.angle += 5;
-
-        if (pad1.justReleased(Phaser.Gamepad.XBOX360_B)) {
-            sprite.scale.x += 0.01;
-            sprite.scale.y = sprite.scale.x;
-        }
-
-        if (pad1.connected) {
-            var rightStickX = pad1.axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X);
-            var rightStickY = pad1.axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_Y);
-
-            if (rightStickX)
-                sprite.x += rightStickX * 10;
-
-            if (rightStickY)
-                sprite.y += rightStickY * 10;
+        if (this.pad.connected) {
+            if (leftStickX)
+                this.player.x += leftStickX * 7;
+            if (leftStickY)
+                this.player.y += leftStickY * 7;
         }
     }
-    */
+
 }
