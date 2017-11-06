@@ -12,8 +12,8 @@ window.onload = function() {
     var game = new Phaser.Game(gameWidth, gameHeight, Phaser.CANVAS, 'game', { preload: preload, create: create, init: init, update: update,render : render });
 
     function preload() {
-        game.load.image('bomb', 'assets/bomb-mini.png');    
-        game.load.image('ball', 'assets/circle.png');
+        game.load.image('bomb', '../assets/bomb-mini.png');    
+        game.load.image('ball', '../assets/circle.png');
     }
 
     var snakeHead; // Snake's head
@@ -71,7 +71,7 @@ window.onload = function() {
         snakeHead.body.angularVelocity = 0;
 
         if (true/*cursors.up.isDown*/) {
-            snakeHead.body.velocity.copyFrom(game.physics.arcade.velocityFromAngle(snakeHead.angle, 300));
+            game.physics.arcade.moveToPointer(snakeHead, 300);
             var part = snakePath.pop();
             part.setTo(snakeHead.x, snakeHead.y);
             snakePath.unshift(part);
@@ -80,13 +80,6 @@ window.onload = function() {
                 snakeSection[i].y = (snakePath[i * snakeSpacer]).y;
             }
         }
-
-        if (cursors.left.isDown) {
-            snakeHead.body.angularVelocity = -300;
-        } else if (cursors.right.isDown) {
-            snakeHead.body.angularVelocity = 300;
-        }
-
     }
 
     function render() {      
@@ -152,7 +145,7 @@ window.onload = function() {
 
         // Own Tail
         if (score < 1) return false;
-        for (let i = 16 ; i < snakeSection.length ; i++) {
+        for (let i = 3 ; i < snakeSection.length ; i++) {
             s = snakeSection[i];
             //console.log(distance(b[0], b[1], player.x, player.y));
             if (distance(s.x, s.y, snakeHead.x, snakeHead.y) < 15) {
