@@ -9,7 +9,7 @@ window.onload = function() {
     let score;
     let scoreText;
 
-    var game = new Phaser.Game(gameWidth, gameHeight, Phaser.CANVAS, 'phaser-example', { preload: preload, create: create, init: init, update: update,render : render });
+    var game = new Phaser.Game(gameWidth, gameHeight, Phaser.CANVAS, 'game', { preload: preload, create: create, init: init, update: update,render : render });
 
     function preload() {
         game.load.image('bomb', 'assets/bomb-mini.png');    
@@ -21,6 +21,7 @@ window.onload = function() {
     var snakePath = new Array(); // Snake's dots' position
     var numSnakeSections = 25; // Number of snakeSection (without head)
     var snakeSpacer = 4; // Space between snakeSections
+
     function create() {
 
         game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -32,13 +33,26 @@ window.onload = function() {
         snakeHead.anchor.setTo(0.5, 0.5);
         game.physics.enable(snakeHead, Phaser.Physics.ARCADE);
 
-        for (var i = 1; i <= numSnakeSections-1; i++) {
+        let i;
+        for (i = 1; i <= numSnakeSections-1; i++) {
             snakeSection[i] = game.add.sprite(gameWidth / 2, gameHeight / 2, 'ball');
             snakeSection[i].anchor.setTo(0.5, 0.5);
         }
         
-        for (var i = 0; i <= numSnakeSections * snakeSpacer; i++) {
+        for (i = 0; i <= numSnakeSections * snakeSpacer; i++) {
             snakePath[i] = new Phaser.Point(gameWidth / 2, gameHeight / 2);
+        }
+
+        let x, y;
+        for (i = 0 ; i < 5 ; i++) {
+            x = Math.floor(Math.random() * gameWidth) ;
+            y = Math.floor(Math.random() * gameHeight) ;
+            if (distance(x, y, gameWidth / 2, gameHeight / 2) > 50 
+                && !(x > gameWidth / 2 && y > gameHeight / 2 - 40 && y < gameHeight / 2 + 40)) {
+                bomb = game.add.sprite(x, y, 'bomb');
+                bomb.anchor.setTo(0.5, 0.5);
+                bombs.push(bomb);
+            }
         }
     }
 
@@ -50,11 +64,8 @@ window.onload = function() {
 
     function update() { 
         addBomb();
-        if (isCollision()) {
-            gameOver();
-        }
-        score += 0.01;
-        afficherScore()
+        checkCollisions();
+        updateScore();
         
         snakeHead.body.velocity.setTo(0, 0);
         snakeHead.body.angularVelocity = 0;
@@ -78,8 +89,14 @@ window.onload = function() {
 
     }
 
-    function render() {
+    function render() {      
         //game.debug.spriteInfo(snakeHead, 32, 32);
+    }
+
+    function checkCollisions() {
+        if (isCollision()) {
+            gameOver();
+        }
     }
    
     function getRandomColor() {
@@ -88,6 +105,11 @@ window.onload = function() {
         let hex = '0x';
         while (length--) hex += chars[(Math.random() * 16) | 0];
         return hex;
+    }
+
+    function updateScore() {
+        score += .01;
+        afficherScore();
     }
 
     function afficherScore() {
@@ -99,15 +121,16 @@ window.onload = function() {
         if (Math.random() > bombProbability) {
             let x = Math.floor(Math.random() * gameWidth) ;
             let y = Math.floor(Math.random() * gameHeight) ;
-            //console.debug("player: " + player.x + " " + player.y + "\nbomb: " + x + " " + y);
-            //console.debug("dist: " + distance(x, y, player.x, player.y));
-            //TODO: center, not right corner 
-            if (distance(x, y, snakeHead.x, snakeHead.y) > 26) {
-                console.log("NEW BOMB : [" + x + ", " + y + "]");
+            if (distance(x, y, snakeHead.x, snakeHead.y) > 50) {
                 bomb = game.add.sprite(x, y, 'bomb');
-                bombs.push([x, y]);
+                bomb.anchor.setTo(0.5, 0.5);
+                bombs.push(bomb);
             }
         }
+    }
+
+    function getSnakeHeadCenter() {
+
     }
 
     function isCollision() {
@@ -122,7 +145,7 @@ window.onload = function() {
         for (let i = 0 ; i < bombs.length ; i++) {
             b = bombs[i];
             //console.log(distance(b[0], b[1], player.x, player.y));
-            if (distance(b[0], b[1], snakeHead.x, snakeHead.y) < 15) {
+            if (distance(b.x, b.y, snakeHead.x, snakeHead.y) <= 28) {
                 return true;
             }
         }
@@ -140,7 +163,13 @@ window.onload = function() {
     }
 
     function gameOver() {
-        confirm('Lol you lost with ' + parseInt(score) + ' pts\n\nnoob go play candy crush');
+        if (score < 5) {
+            confirm('Oh non :( Tu as perdu !\nTu as fais ' + parseInt(score) + ' points, tu dois être DeViNT'); 
+        } else if (score < 10) {
+            confirm('Oh non :(\n Tu as perdu !\nMais tu as fais ' + parseInt(score) + ' points,\ntu peux faire mieux =)'); 
+        } else {
+            confirm('Oh non :(\n Tu as perdu !\nMais tu as fais ' + parseInt(score) + ' points,\ntu dois être très fort'); 
+        }
         location.reload();
     }
 
