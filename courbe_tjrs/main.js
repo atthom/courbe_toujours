@@ -15,7 +15,7 @@ window.onload = function() {
         game.load.image('bomb', 'assets/bomb-mini.png');
         game.load.image('ball', 'assets/circle.png');
         game.load.image('ball3', 'assets/circle3.png');
-        //game.load.image('head', 'assets/head.png');
+        game.load.image('head', 'assets/head.png');
     }
 
     var snakeHead; // Snake's head
@@ -33,8 +33,9 @@ window.onload = function() {
 
         cursors = game.input.keyboard.createCursorKeys();
 
-        snakeHead = game.add.sprite(gameWidth / 2, gameHeight / 2, 'ball3');
-        snakeHead.scale.setTo(0.105, 0.105);
+        // snakeHead = game.add.sprite(gameWidth / 2, gameHeight / 2, 'ball3');
+        snakeHead = game.add.sprite(gameWidth / 2, gameHeight / 2, 'head');
+        snakeHead.scale.setTo(0.06, 0.06);
         snakeHead.anchor.setTo(0.5, 0.5);
         game.physics.enable(snakeHead, Phaser.Physics.ARCADE);
 
