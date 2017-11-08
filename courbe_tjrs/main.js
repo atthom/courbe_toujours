@@ -15,13 +15,14 @@ window.onload = function() {
         game.load.image('bomb', 'assets/bomb-mini.png');
         game.load.image('ball', 'assets/circle.png');
         game.load.image('ball3', 'assets/circle3.png');
+        //game.load.image('head', 'assets/head.png');
     }
 
     var snakeHead; // Snake's head
     var snakeSection = new Array(); // Snake's tail
     var snakePath = new Array(); // Snake's dots' position
     var numSnakeSections = 25; // Number of snakeSection (without head)
-    var snakeSpacer = 4; // Space between snakeSections
+    var snakeSpacer = 3; // Space between snakeSections
 
     var current_size = 1;
 
@@ -48,18 +49,6 @@ window.onload = function() {
             snakePath[i] = new Phaser.Point(gameWidth / 2, gameHeight / 2);
         }
 
-        let x, y;
-        for (i = 0; i < 5; i++) {
-            x = Math.floor(Math.random() * gameWidth);
-            y = Math.floor(Math.random() * gameHeight);
-            if (distance(x, y, gameWidth / 2, gameHeight / 2) > 50 &&
-                !(x > gameWidth / 2 && y > gameHeight / 2 - 40 && y < gameHeight / 2 + 40)) {
-                bomb = game.add.sprite(x, y, 'bomb');
-                bomb.anchor.setTo(0.5, 0.5);
-                bombs.push(bomb);
-            }
-        }
-
     }
 
     function init() {
@@ -72,21 +61,21 @@ window.onload = function() {
         addBomb();
         checkCollisions();
         updateScore();
+        snake_angularVelocity();
+
+    }
+
+    function snake_angularVelocity() {
 
         snakeHead.body.velocity.setTo(0, 0);
         snakeHead.body.angularVelocity = 0;
-
-
-
-        if (true) {
-            snakeHead.body.velocity.copyFrom(game.physics.arcade.velocityFromAngle(snakeHead.angle, 300));
-            var part = snakePath.pop();
-            part.setTo(snakeHead.x, snakeHead.y);
-            snakePath.unshift(part);
-            for (var i = 1; i <= numSnakeSections - 1; i++) {
-                snakeSection[i].x = (snakePath[i * snakeSpacer]).x;
-                snakeSection[i].y = (snakePath[i * snakeSpacer]).y;
-            }
+        snakeHead.body.velocity.copyFrom(game.physics.arcade.velocityFromAngle(snakeHead.angle, 300));
+        var part = snakePath.pop();
+        part.setTo(snakeHead.x, snakeHead.y);
+        snakePath.unshift(part);
+        for (var i = 1; i <= numSnakeSections - 1; i++) {
+            snakeSection[i].x = (snakePath[i * snakeSpacer]).x;
+            snakeSection[i].y = (snakePath[i * snakeSpacer]).y;
         }
 
         if (cursors.left.isDown) {
@@ -97,9 +86,9 @@ window.onload = function() {
 
     }
 
-    function render() {
-        //game.debug.spriteInfo(snakeHead, 32, 32);
-    }
+    function render() {}
+
+    function getSnakeHeadCenter() {}
 
     function checkCollisions() {
         if (isCollision()) {
@@ -136,7 +125,6 @@ window.onload = function() {
         }
     }
 
-    function getSnakeHeadCenter() {}
 
     function isCollision() {
         let b, s;
