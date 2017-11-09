@@ -71,7 +71,7 @@ window.onload = function() {
         snakeHead.body.angularVelocity = 0;
 
         if (true/*cursors.up.isDown*/) {
-            game.physics.arcade.moveToPointer(snakeHead, 300);
+            game.physics.arcade.moveToPointer(snakeHead, 250);
             var part = snakePath.pop();
             part.setTo(snakeHead.x, snakeHead.y);
             snakePath.unshift(part);
